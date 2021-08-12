@@ -22,23 +22,22 @@ function createTextElement(text) {
   }
 }
 
-function render(element, container) {
-  const dom = element.type == 'TEXT_ELEMENT'
+function render(element, parent) {
+  const newElement = element.type == 'TEXT_ELEMENT'
     ? document.createTextNode('')
     : document.createElement(element.type)
 
-  const isProperty = key => key !== 'children'
   Object.keys(element.props)
-    .filter(isProperty)
+    .filter(key => key !== 'children')
     .forEach(name => {
-      dom[name] = element.props[name]
+      newElement[name] = element.props[name]
     })
-  
+
   element.props.children.forEach(child =>
-    render(child, dom)
+    render(child, newElement)
   )
 
-  container.append(dom)
+  parent.append(newElement)
 }
 
 const Didact = {
